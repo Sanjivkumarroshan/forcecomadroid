@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="account_type">pl.skrodzki.android.force</string>
+	<string name="oauth_callback_url">sfdc://success</string>
+	<string name="oauth_client_id">3MVG9rFJvQRVOvk6t73e_FDQjkfoPYUijdEwH8iC1QZpb54HajsLZReZIy.DvMUI4I5eCMoA4XXkc4yeYi7dA</string>
+	<string name="api_version">v23.0</string>
+	<string name="encoding">UTF-8</string>
+</resources>
