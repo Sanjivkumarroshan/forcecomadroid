@@ -39,6 +39,7 @@
 		
 		<!-- Choose server activity -->
 		<activity android:name="com.salesforce.androidsdk.ui.ServerPickerActivity" android:excludeFromRecents="true" />
+		<activity android:name=".ContactListActivity" android:configChanges="orientation|keyboardHidden"/>	
 	</application>
 
 	<uses-permission android:name="android.permission.INTERNET" />
