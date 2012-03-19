@@ -40,15 +40,14 @@
 		<!-- Choose server activity -->
 		<activity android:name="com.salesforce.androidsdk.ui.ServerPickerActivity" android:excludeFromRecents="true" />
 		<activity android:name=".ContactListActivity" android:configChanges="orientation|keyboardHidden"/>	
-		<uses-permission android:name="android.permission.INTERNET" />
-		<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-		<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-		<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-		<uses-permission android:name="android.permission.USE_CREDENTIALS" />
-		<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-		<uses-permission android:name="android.permission.CALL_PHONE" />
 	</application>
-
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
 	<!-- device os versions http://developer.android.com/guide/publishing/versioning.html -->
 	<uses-sdk android:minSdkVersion="8" />
 
