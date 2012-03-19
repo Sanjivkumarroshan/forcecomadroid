@@ -1,5 +1,7 @@
 package pl.skrodzki.android.force;
 
+import java.util.LinkedList;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,14 +17,24 @@ import com.salesforce.androidsdk.util.EventsObservable;
 import com.salesforce.androidsdk.util.EventsObservable.EventType;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+import pl.skrodzki.android.force.objects.*;
 
 public class ContactListActivity  extends Activity{
 	
-    private String[] accounts;
+    private LinkedList<SalesforceContact> contactsList;
     private ListView lv;
     private RestClient client;
     private String apiVersion;
@@ -33,8 +45,30 @@ public class ContactListActivity  extends Activity{
         apiVersion = getString(R.string.api_version);
         
         lv = (ListView)findViewById(R.id.trackList);
-        
-		lv.setEnabled(false);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+		    public void onItemClick(AdapterView<?> parent, View view,
+		        final int position, long id) {
+		    	Context mContext = view.getContext();
+		    	final Dialog dialog = new Dialog(mContext);
+
+		    	dialog.setContentView(R.layout.contact_details);
+		    	dialog.setTitle("Custom Dialog");
+
+		    	TextView text = (TextView) dialog.findViewById(R.id.text);
+		    	text.setText(contactsList.get(position).Phone);
+		    	Button button = (Button) dialog.findViewById(R.id.contactDetailsOkButton);
+		    	button.setOnClickListener(new OnClickListener() {
+					
+					public void onClick(View v) {
+						String url = "tel:" + contactsList.get(position).Phone;
+					    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+					    startActivity(intent);
+					}
+				});
+		    	dialog.show();
+		    }
+		});       
+		//lv.setEnabled(false);
     }
     
 	public void doneBtnInvoked(View v)
@@ -72,7 +106,7 @@ public class ContactListActivity  extends Activity{
 	private void getAccounts(){
 		try {
 			String accountId = getIntent().getStringExtra("ACCOUNT_ID");
-			String soql = "select Id, Name from Contact where AccountId = '"+accountId+"'";
+			String soql = "select Id, Name, Phone, Fax from Contact where AccountId = '"+accountId+"'";
 			RestRequest request = RestRequest.getRequestForQuery(apiVersion, soql);
 
 			client.sendAsync(request, new AsyncRequestCallback() {
@@ -87,16 +121,21 @@ public class ContactListActivity  extends Activity{
 						if (records.length() == 0)
 							return;
 										
-						accounts = new String[records.length()];
-						
+						contactsList = new LinkedList<SalesforceContact>();
+						LinkedList<String> contactNames = new LinkedList<String>();
 						for (int i = 0; i < records.length(); i++){
-							JSONObject album = (JSONObject)records.get(i);
-							accounts[i] = (i+1) + ".  "+ album.getString("Name");
-			
+							JSONObject contacts = (JSONObject)records.get(i);
+							SalesforceContact newContact = new SalesforceContact();
+							newContact.Id = contacts.getString("Id");
+							newContact.Name = contacts.getString("Name");
+							newContact.Phone = contacts.getString("Phone");
+							newContact.Fax = contacts.getString("Fax");
+							contactsList.add(newContact);
+							contactNames.add(i + "." + newContact.Name);
 						}
-				        ArrayAdapter<String> ad = new ArrayAdapter<String>(ContactListActivity.this, 
+						ArrayAdapter<String> ad = new ArrayAdapter<String>(ContactListActivity.this, 
 				        												   R.layout.list_item, 
-				        												   accounts);
+				        												   contactNames);
 				        lv.setAdapter(ad);
 				        EventsObservable.get().notifyEvent(EventType.RenditionComplete);
 					} catch (Exception e) {
