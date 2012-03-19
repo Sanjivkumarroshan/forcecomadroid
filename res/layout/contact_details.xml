@@ -1,18 +1,49 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout_root"
-              android:orientation="horizontal"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:padding="10dp"
-              >
-    <TextView android:id="@+id/text"
-              android:layout_width="wrap_content"
-              android:layout_height="fill_parent"
-              android:textColor="#FFF"
-              />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/linearLayout1"
+        android:layout_weight="1"
+        android:textColor="#FFF" />
+
     <Button
         android:id="@+id/contactDetailsOkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Call" />    
-</LinearLayout>
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/text"
+        android:layout_marginTop="68dp"
+        android:layout_weight="1"
+        android:text="@string/contact_details_ok_button" />
+
+    <Button
+        android:id="@+id/contactDetailsCallButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/contactDetailsOkButton"
+        android:layout_alignBottom="@+id/contactDetailsOkButton"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/contactDetailsOkButton"
+        android:layout_weight="1"
+        android:text="@string/contact_details_call_button" />
+
+    <Button
+        android:id="@+id/contactDetailsEditButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/contactDetailsCallButton"
+        android:layout_alignBottom="@+id/contactDetailsCallButton"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:text="@string/contact_details_edit_button" />
+
+</RelativeLayout>

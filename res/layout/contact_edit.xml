@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <EditText
+        android:id="@+id/contactEditInputName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/contactEditLabelName" />
+
+    <TextView
+        android:id="@+id/contactEditLabelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/contactEditInputName"
+        android:layout_alignBottom="@+id/contactEditInputName"
+        android:text="@string/contact_edit_name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/contactEditInputPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/contactEditInputName"
+        android:layout_toRightOf="@+id/contactEditLabelName" />
+
+    <TextView
+        android:id="@+id/contactEditLabelPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/contactEditInputPhone"
+        android:layout_alignBottom="@+id/contactEditInputPhone"
+        android:layout_alignParentLeft="true"
+        android:text="@string/contact_edit_phone"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/contactEditButtonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/contactEditInputPhone"
+        android:layout_marginTop="36dp"
+        android:text="@string/contact_edit_button_save" />
+
+    <Button
+        android:id="@+id/contactEditButtonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/contactEditButtonSave"
+        android:layout_alignBottom="@+id/contactEditButtonSave"
+        android:layout_marginLeft="24dp"
+        android:layout_toRightOf="@+id/contactEditLabelPhone"
+        android:text="@string/contact_edit_button_cancel" />
+
+</RelativeLayout>
