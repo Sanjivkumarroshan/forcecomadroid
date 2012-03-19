@@ -1,6 +1,8 @@
 package pl.skrodzki.android.force;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,13 +58,55 @@ public class ContactListActivity  extends Activity{
 
 		    	TextView text = (TextView) dialog.findViewById(R.id.text);
 		    	text.setText(contactsList.get(position).Phone);
-		    	Button button = (Button) dialog.findViewById(R.id.contactDetailsOkButton);
-		    	button.setOnClickListener(new OnClickListener() {
+		    	Button callButton = (Button) dialog.findViewById(R.id.contactDetailsCallButton);
+		    	callButton.setOnClickListener(new OnClickListener() {
 					
 					public void onClick(View v) {
 						String url = "tel:" + contactsList.get(position).Phone;
 					    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
 					    startActivity(intent);
+					}
+				});
+		    	Button editButton = (Button) dialog.findViewById(R.id.contactDetailsEditButton);
+		    	editButton.setOnClickListener(new OnClickListener() {
+					
+					public void onClick(View v) {
+						Context mContext = v.getContext();
+				    	final Dialog dialog = new Dialog(mContext);
+
+				    	dialog.setContentView(R.layout.contact_edit);
+				    	dialog.setTitle("Edit Contact - " + contactsList.get(position).Name);
+
+				    	TextView text = (TextView) dialog.findViewById(R.id.contactEditInputName);
+				    	text.setText(contactsList.get(position).Name);
+				    	text = (TextView) dialog.findViewById(R.id.contactEditInputPhone);
+				    	text.setText(contactsList.get(position).Phone);
+				    	Button saveButton = (Button) dialog.findViewById(R.id.contactEditButtonSave);
+				    	saveButton.setOnClickListener(new OnClickListener() {
+							
+							public void onClick(View v) {
+								HashMap<String, Object> fields = new HashMap<String, Object>();
+								fields.put("Name", ((TextView)dialog.findViewById(R.id.contactEditInputName)).getText());
+								fields.put("Phone", ((TextView)dialog.findViewById(R.id.contactEditInputPhone)).getText());
+								//updateContact(contactsList.get(position).Id, fields);
+								insertContact(fields);
+							}
+						});
+				    	Button cancelButton = (Button) dialog.findViewById(R.id.contactEditButtonCancel);
+				    	cancelButton.setOnClickListener(new OnClickListener() {
+							
+							public void onClick(View v) {
+								dialog.dismiss();
+							}
+						});	
+				    	dialog.show();
+					}
+				});
+		    	Button okButton = (Button) dialog.findViewById(R.id.contactDetailsOkButton);
+		    	okButton.setOnClickListener(new OnClickListener() {
+					
+					public void onClick(View v) {
+						dialog.dismiss();
 					}
 				});
 		    	dialog.show();
@@ -97,13 +141,13 @@ public class ContactListActivity  extends Activity{
 					return;
 				}
 				ContactListActivity.this.client = client;
-				getAccounts();
+				getContacts();
 			}
 		});
 			
 	}
 	
-	private void getAccounts(){
+	private void getContacts(){
 		try {
 			String accountId = getIntent().getStringExtra("ACCOUNT_ID");
 			String soql = "select Id, Name, Phone, Fax from Contact where AccountId = '"+accountId+"'";
@@ -156,7 +200,50 @@ public class ContactListActivity  extends Activity{
 		}		
 	}
 	
-	
+	private void updateContact(String objectId, Map<String, Object> fields){
+		String objectType = "Contactdupa";
+		try {                
+		    RestRequest request = RestRequest.getRequestForUpdate(apiVersion, objectType, objectId,	fields);
+		    client.sendAsync(request, new AsyncRequestCallback() {
+				
+				public void onSuccess(RestResponse response) {
+					displayError("blbalababl Success");
+					EventsObservable.get().notifyEvent(EventType.RenditionComplete);
+					
+				}
+				
+				public void onError(Exception exception) {
+					displayError(exception.getMessage());
+					EventsObservable.get().notifyEvent(EventType.RenditionComplete);					
+				}
+			});
+		} catch (Exception e) {
+
+		}
+
+	}
+	private void insertContact(Map<String, Object> fields){
+		String objectType = "Contactdupa";
+		try {                
+		    RestRequest request = RestRequest.getRequestForCreate(apiVersion, objectType, fields);
+		    client.sendAsync(request, new AsyncRequestCallback() {
+				
+				public void onSuccess(RestResponse response) {
+					displayError("blbalababl Success");
+					EventsObservable.get().notifyEvent(EventType.RenditionComplete);
+					
+				}
+				
+				public void onError(Exception exception) {
+					displayError(exception.getMessage());
+					EventsObservable.get().notifyEvent(EventType.RenditionComplete);					
+				}
+			});
+		} catch (Exception e) {
+
+		}
+
+	}	
 	private void displayError(String error)	{
         ArrayAdapter<String> ad = new ArrayAdapter<String>(	ContactListActivity.this, 
         													R.layout.list_item, 
